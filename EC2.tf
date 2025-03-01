@@ -6,16 +6,16 @@ resource "aws_instance" "docker_ec2" {
 
   user_data = <<-EOF
               #!/bin/bash
-              sudo yum update -y
-              sudo yum install -y docker
-              sudo service docker start
-              sudo usermod -aG docker ec2-user
-              sudo chmod 666 /var/run/docker.sock
-              
-              # Verify Docker installation
-              docker --version
-              EOF
+              sudo apt-get update -y
+              sudo apt-get install -y docker.io
+              sudo systemctl start docker
+              sudo systemctl enable docker
+              sudo usermod -aG docker ubuntu
 
+              # Pull and run JMeter container
+              sudo docker pull justb4/jmeter
+              sudo docker run -d --name jmeter-server -p 1099:1099 justb4/jmeter
+              EOF
   tags = {
     Name = "Docker-EC2"
   }
