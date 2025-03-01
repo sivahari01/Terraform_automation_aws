@@ -1,5 +1,9 @@
+resource "random_pet" "s3_name" {
+  length = 2  # Generates two random words
+}
+
 resource "aws_s3_bucket" "s3buck" {
-  bucket = "myvtfitestsbucket1232"
+  bucket = "myrbucket-${random_pet.s3_name.id}"
   
   tags = {
     Name        = "My bucket"
