@@ -8,6 +8,6 @@ terraform {
 }
 provider "aws" {
   region = "us-east-1"  # Specify the AWS region
-  access_key = "your-access-key-id"       # Your AWS Access Key ID
-  secret_key = "your-secret-access-key"   # Your AWS Secret Access Ke
+  access_key = ${{ secrets.AWS_ACCESS }}      # Your AWS Access Key ID
+  secret_key = ${{ secrets.SECRET_KEY }}  # Your AWS Secret Access Ke
 }
