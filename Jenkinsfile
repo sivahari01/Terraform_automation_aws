@@ -1,11 +1,24 @@
 pipeline {
     agent any
     stages {
-        stage('Terraform') {
+        stage('Checkout') {
             steps {
-                sh 'docker run --rm -v $PWD:/workspace -w /workspace hashicorp/terraform:latest init'
-                sh 'docker run --rm -v $PWD:/workspace -w /workspace hashicorp/terraform:latest plan'
-                sh 'docker run --rm -v $PWD:/workspace -w /workspace hashicorp/terraform:latest apply -auto-approve'
+                git 'https://github.com/sivahari01/DevopsLearn.git'
+            }
+        }
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
             }
         }
     }
