@@ -4,7 +4,7 @@ pipeline {
         stage('Run Shell Command') {
             steps {
                 sh 'ls'
-                sh  cd DevopsLearn
+                sh  'cd DevopsLearn'
             }
         }
     }
