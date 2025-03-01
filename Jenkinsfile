@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Run Shell Command') {
             steps {
-                sh 'echo "Hello, Jenkins!"'
+                sh 'ls'
+                sh  cd DevopsLearn
             }
         }
     }
