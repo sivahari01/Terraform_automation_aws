@@ -1,5 +1,4 @@
-resource "aws_iam_policy_attachment" "s3_full_access" {
-  name       = "s3-full-access-attachment"
-  roles      = [aws_iam_role.s3_access_role.name]
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+resource "aws_iam_role_policy_attachment" "s3_attach" {
+  policy_arn = aws_iam_policy.s3_policy.arn
+  role       = aws_iam_role.s3_role.name
 }
