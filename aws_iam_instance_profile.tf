@@ -1,4 +1,4 @@
-resource "aws_iam_instance_profile" "s3_profile" {
-  name = "s3-instance-profile"
-  role = aws_iam_role.s3_access_role.name
+resource "aws_iam_role_policy_attachment" "s3_attach" {
+  policy_arn = aws_iam_policy.s3_policy.arn
+  role       = aws_iam_role.s3_role.name
 }
