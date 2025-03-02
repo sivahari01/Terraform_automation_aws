@@ -1,8 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCESS_KEY_ID     = ''
-        AWS_SECRET_ACCESS_KEY = ''
+        AWS_REGION = 'us-east-1'  // Set your preferred AWS region
     }
     stages {
         stage('Checkout') {
@@ -16,8 +15,7 @@ pipeline {
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     script {
-                        env.AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID
-                        env.AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY
+                        echo "AWS Credentials Set"
                     }
                 }
             }
@@ -25,26 +23,32 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh 'terraform init'
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
                 sh '''
-                    terraform plan -auto-approve \
+                    terraform plan \
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                    '''
+                '''
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
             steps {
-               sh '''
+                sh '''
                     terraform apply -auto-approve \
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                    '''
-
+                '''
+                sh 'sleep 60s
             }
         }
-        stage('Terraform Apply Destroy') {
+        stage('Terraform Destroy') {
             steps {
-                sh 'terraform destroy -auto-approve'
+                sh '''
+                    terraform destroy -auto-approve
+                '''
             }
         }
     }
