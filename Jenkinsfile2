@@ -6,7 +6,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/sivahari01/DevopsLearn.git'
+                //git 'https://github.com/sivahari01/DevopsLearn.git'
+                sh 'ls'
+                sh 'pwd'
             }
         }
         stage('Set AWS Credentials') {
@@ -22,16 +24,16 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                //sh 'terraform init'
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
             steps {
-                sh '''
-                    terraform destroy -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
+               // sh '''
+                 //   terraform destroy -auto-approve \
+                   //   -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                     // -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                //'''
                 sh 'sleep 60s'
             }
         }
