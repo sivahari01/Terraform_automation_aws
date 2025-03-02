@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo -i
+
 # Update package index
 sudo apt-get update -y
 
@@ -18,12 +18,13 @@ sudo apt-get update -y
 # Install Docker CE (Community Edition)
 sudo apt-get install -y docker-ce
 
-# Start Docker service
+# Start and enable Docker service
 sudo systemctl start docker
 sudo systemctl enable docker
 
 # Add the default user to the docker group (use `ec2-user` for Amazon Linux)
 sudo usermod -aG docker ubuntu
+newgrp docker  # Apply group change immediately
 
 # Clone GitHub repository
 git clone https://github.com/sivahari01/JmeterRunGit.git /root/JmeterRunGit
@@ -36,16 +37,25 @@ sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
   -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
-## Create AWS credentials file
+# Create AWS credentials file
+mkdir -p ~/.aws
 echo "[default]" > ~/.aws/credentials
 echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
 echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
 
-#cli install
+# Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
-sudo ./aws/install
+sudo ./aws/install -y
 
+# Verify AWS CLI installation
 aws --version
-aws s3 cp html_report.zip s3://mykopsbkter/
-aws s3 cp html_report.zip s3://mykopsbkter/
+
+# Zip the HTML report before uploading
+cd /results
+zip -r /root/html_report.zip html_report
+
+# Upload report to S3
+aws s3 cp /root/html_report.zip s3://mykopsbkter/
+
+echo "✅ Script execution completed successfully!"
