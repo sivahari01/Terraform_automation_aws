@@ -41,7 +41,7 @@ pipeline {
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
                 '''
-                sh 'sleep 60s
+                sh 'sleep 60s'
             }
         }
         stage('Terraform Destroy') {
