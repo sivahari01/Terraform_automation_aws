@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from Git repository
+                git 'https://github.com/your-repository.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                // Your build steps go here
+                sh 'ls'
+            }
+        }
+    }
+    post {
+        always {
+            // Clean up workspace after every build
+            cleanWs()
+        }
+    }
+}
