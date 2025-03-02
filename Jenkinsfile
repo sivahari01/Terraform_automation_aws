@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-        // Keep the last 2 builds
+        // Keep the last 5 builds
         buildDiscarder(logRotator(numToKeepStr: '2'))
     }
     environment {
@@ -49,5 +49,4 @@ pipeline {
             }
         }
     }
-  }
 }
