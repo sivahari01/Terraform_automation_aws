@@ -37,5 +37,6 @@ pipeline {
                 sh 'sleep 60s'
             }
         }
+}
     } // Close stages block
 } // Close pipeline block
