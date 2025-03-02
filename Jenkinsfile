@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Debug AWS Credentials') {
             steps {
-                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                withCredentials([aws(credentialsId: 'AWS Credentials', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh 'echo "AWS_ACCESS_KEY_ID is set"'
@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                withCredentials([aws(credentialsId: 'AWS Credentials', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh 'terraform init'
