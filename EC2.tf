@@ -4,7 +4,7 @@ resource "aws_instance" "docker_ec2" {
   key_name             = "NewKey_310324"
   security_groups      = [aws_security_group.docker_sg.name]
  # Handle count indexing properly
-  user_data = "${file(set.sh)}"
+  user_data = "${file("set.sh")}"
   tags = {
     Name = "Docker-EC2"
   }
