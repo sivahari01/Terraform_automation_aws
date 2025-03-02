@@ -23,4 +23,10 @@ pipeline {
             }
         }
     } // Close stages block
+  post {
+        always {
+            // Clean up workspace after every build
+            cleanWs()
+        }
+    }
 } // Close pipeline block
