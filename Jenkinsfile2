@@ -6,8 +6,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'ls'
-                sh 'pwd'
+               sh '''
+                    ls
+                    pwd
+                    cd ..
+                    cd Terraform 
+                    terraform destroy -auto-approve \
+                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                '''
+                 
             }
         }
     } // Close stages block
