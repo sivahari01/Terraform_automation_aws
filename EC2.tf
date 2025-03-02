@@ -4,9 +4,7 @@ resource "aws_instance" "docker_ec2" {
   key_name             = "NewKey_310324"
   security_groups      = [aws_security_group.docker_sg.name]
  # Handle count indexing properly
-  iam_instance_profile = length(aws_iam_instance_profile.s3_instance_profile) > 0 ? 
-                         aws_iam_instance_profile.s3_instance_profile[0].name : 
-                         "EC2-S3-Instance-Profile
+  iam_instance_profile = aws_iam_instance_profile.s3_instance_profile.name
 
   user_data = <<-EOF
               #!/bin/bash -xe
