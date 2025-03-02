@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sudo -i
 # Update package index
 sudo apt-get update -y
 
