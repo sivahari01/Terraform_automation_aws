@@ -35,3 +35,8 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
   -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
+
+#zip
+zip -r html_report.zip html_report/
+
+aws s3 cp html_report.zip s3://mykopsbkter/
