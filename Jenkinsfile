@@ -25,22 +25,11 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh 'terraform init'
-                sh 'terraform apply -target=provider -auto-approve'
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
             steps {
-                sh 'terraform apply -target=EC2 -auto-approve'
-            }
-        }
-        stage('Terraform Apply Bucket') {
-            steps {
-                sh 'terraform apply -target=bucket -auto-approve'
-            }
-        }
-        stage('Terraform Apply S3 Upload Bucket') {
-            steps {
-                sh 'terraform apply -target=aws_cpy -auto-approve'
+                sh 'terraform apply -target=aws_instance.docker_ec2 -auto-approve'
             }
         }
         stage('Terraform Apply Destroy') {
