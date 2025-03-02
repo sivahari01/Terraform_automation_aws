@@ -10,9 +10,10 @@ pipeline {
         stage('Debug Environment') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'AWS_CREDENTIALS', 
-                                                  usernameVariable: 'AWS_ACCESS_KEY_ID', 
-                                                  passwordVariable: 'AWS_SECRET_ACCESS_KEY')])
-                sh 'echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"'
+                                                    usernameVariable: 'AWS_ACCESS_KEY_ID', 
+                                                    passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh 'echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"'
+                }
             }
         }
     }
