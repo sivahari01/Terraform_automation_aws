@@ -1,10 +1,14 @@
 pipeline {
     agent any
+    options {
+        // Keep the last 5 builds
+        buildDiscarder(logRotator(numToKeepStr: '2'))
+    }
     environment {
         AWS_REGION = 'us-east-1'  // Set your preferred AWS region
     }
     stages {
-        stage('Checkout') {
+        /*stage('Checkout') {
             steps {
                 git 'https://github.com/sivahari01/DevopsLearn.git'
             }
@@ -43,6 +47,6 @@ pipeline {
                 '''
                 sh 'sleep 60s'
             }
-        }
+        }*/
         }
     }
