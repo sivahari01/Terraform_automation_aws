@@ -5,9 +5,11 @@ pipeline {
     }
     stages {
         stage('Checkout') {
-             sh 'ls'
-             sh  'pwd'
+            steps {
+                sh 'ls'
+                sh 'pwd'
+            }
         }
-}
-}
+    } // Close stages block
+} // Close pipeline block
 
