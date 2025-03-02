@@ -54,10 +54,9 @@ sudo ./aws/install -y
 aws --version
 
 # Zip the HTML report before uploading
-cd /results
-zip -r /root/html_report.zip html_report
+sudo zip -r /root/html_report.zip /root/html_report
 
 # Upload report to S3
-aws s3 cp /root/html_report.zip s3://mykopsbkter/
+sudo aws s3 cp /root/html_report.zip s3://mykopsbkter/
 
 echo "✅ Script execution completed successfully!"
