@@ -38,14 +38,16 @@ sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
   -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
 # Create AWS credentials file
-mkdir -p ~/.aws
-echo "[default]" > ~/.aws/credentials
-echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
-echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+  mkdir -p ~/.aws
+  echo "[default]" > ~/.aws/credentials
+  echo "aws_access_key_id=${var.AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
+  echo "aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+  chmod 600 ~/.aws/credentials
+ 
 
 # Install AWS CLI
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo unzip awscliv2.zip
 sudo ./aws/install -y
 
 # Verify AWS CLI installation
