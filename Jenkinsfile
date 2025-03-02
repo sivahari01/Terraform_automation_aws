@@ -29,7 +29,12 @@ pipeline {
         }
         stage('Terraform Apply EC2 & Security Group') {
             steps {
-                sh 'terraform apply -target=aws_instance.docker_ec2 -auto-approve'
+               sh '''
+                    terraform apply -target=aws_instance.docker_ec2 -auto-approve \
+                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                    '''
+
             }
         }
         stage('Terraform Apply Destroy') {
