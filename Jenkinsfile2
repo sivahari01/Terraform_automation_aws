@@ -1,46 +1,47 @@
 pipeline {
     agent any
-
     environment {
-        ANSIBLE_INVENTORY = 'inventory.ini'
-        ANSIBLE_PLAYBOOK = 'install_docker.yml'
-        SSH_KEY = 'NewKey_310324.pem'
-        EC2_USER = 'ec2-user'
-        EC2_HOST = '3.93.9.138'  // Replace with actual EC2 IP
+        AWS_REGION = 'us-east-1'  // Set your preferred AWS region
     }
-
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/sivahari01/DevopsLearn.git'  // Change repo if needed
+                git 'https://github.com/sivahari01/DevopsLearn.git'
             }
         }
-
-        stage('Prepare SSH Key') {
+        stage('Set AWS Credentials') {
             steps {
-                script {
-                    sh 'chmod 400 ${SSH_KEY}'
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    script {
+                        echo "AWS Credentials Set"
+                    }
                 }
             }
         }
-
-        stage('Create Inventory File') {
+        stage('Terraform Init') {
             steps {
-                script {
-                    sh """
-                        echo '[ec2]' > ${ANSIBLE_INVENTORY}
-                        echo '${EC2_HOST} ansible_user=${EC2_USER} ansible_ssh_private_key_file=${SSH_KEY} ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"' >> ${ANSIBLE_INVENTORY}
-                    """
-                }
+                sh 'terraform init'
             }
         }
-
-        stage('Run Ansible Playbook') {
+        stage('Terraform Plan') {
             steps {
-                script {
-                    sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOK}"
-                }
+                sh '''
+                    terraform plan \
+                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                '''
             }
         }
-    }
-}
+        stage('Terraform Apply EC2 & Security Group') {
+            steps {
+                sh '''
+                    terraform destroy -auto-approve \
+                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                '''
+                sh 'sleep 60s'
+            }
+        }
+        }
