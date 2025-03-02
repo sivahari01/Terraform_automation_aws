@@ -1,27 +1,45 @@
 pipeline {
     agent any
+
     environment {
-        AWS_REGION = 'us-east-1'  // Set your preferred AWS region
+        ANSIBLE_INVENTORY = 'inventory.ini'
+        ANSIBLE_PLAYBOOK = 'install_docker.yml'
+        SSH_KEY = 'NewKey_310324.pem'
+        EC2_USER = 'ec2-user'
+        EC2_HOST = '3.93.9.138'  // Replace with actual EC2 IP
     }
+
     stages {
-        stage('Set AWS Credentials') {
+        stage('Checkout') {
             steps {
-                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
-                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
-                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    script {
-                        echo "AWS Credentials Set"
-                    }
+                git 'https://github.com/sivahari01/DevopsLearn.git'  // Change repo if needed
+            }
+        }
+
+        stage('Prepare SSH Key') {
+            steps {
+                script {
+                    sh 'chmod 400 ${SSH_KEY}'
                 }
             }
         }
-        stage('Terraform Destroy') {
+
+        stage('Create Inventory File') {
             steps {
-                sh '''
-                    terraform destroy -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
+                script {
+                    sh """
+                        echo '[ec2]' > ${ANSIBLE_INVENTORY}
+                        echo '${EC2_HOST} ansible_user=${EC2_USER} ansible_ssh_private_key_file=${SSH_KEY} ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"' >> ${ANSIBLE_INVENTORY}
+                    """
+                }
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    sh "ansible-playbook -i ${ANSIBLE_INVENTORY} ${ANSIBLE_PLAYBOOK}"
+                }
             }
         }
     }
