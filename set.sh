@@ -37,12 +37,20 @@ sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
   -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
+
+# Zip the HTML report before uploading
+sudo zip -r /root/html_report.zip /root/html_report
+
+
 # Create AWS credentials file
   sudo mkdir -p ~/.aws
-  echo "[default]" > ~/.aws/credentials
-  echo "aws_access_key_id=${var.AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
-  echo "aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
-  chmod 600 ~/.aws/credentials
+  echo "[default]
+  aws_access_key_id=${var.AWS_ACCESS_KEY_ID}
+  aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY}" > ~/.aws/credentials
+
+
+# Set correct permissions
+ chmod 600 ~/.aws/credentials
  
 
 # Install AWS CLI
@@ -53,10 +61,8 @@ sudo ./aws/install -y
 # Verify AWS CLI installation
 aws --version
 
-# Zip the HTML report before uploading
-sudo zip -r /root/html_report.zip /root/html_report
-
 # Upload report to S3
 sudo aws s3 cp /root/html_report.zip s3://mykopsbkter/
+
 
 echo "✅ Script execution completed successfully!"
