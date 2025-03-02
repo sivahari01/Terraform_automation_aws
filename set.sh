@@ -36,7 +36,16 @@ sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
   -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
-#zip
-zip -r html_report.zip html_report/
+## Create AWS credentials file
+echo "[default]" > ~/.aws/credentials
+echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
+echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
 
+#cli install
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws --version
+aws s3 cp html_report.zip s3://mykopsbkter/
 aws s3 cp html_report.zip s3://mykopsbkter/
