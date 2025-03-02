@@ -29,13 +29,13 @@ pipeline {
         }
         stage('Terraform Apply EC2 & Security Group') {
             steps {
-               // sh '''
-                 //   terraform destroy -auto-approve \
-                   //   -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                     // -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                //sh '''
+                //   terraform destroy -auto-approve \
+                //   -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                //   -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
                 //'''
                 sh 'sleep 60s'
             }
         }
-}
-
+    } // Close stages block
+} // Close pipeline block
