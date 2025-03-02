@@ -8,9 +8,9 @@ pipeline {
         AWS_REGION = 'us-east-1'  // Set your preferred AWS region
     }
     stages {
-        /*stage('Checkout') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/sivahari01/DevopsLearn.git'
+                // git 'https://github.com/sivahari01/DevopsLearn.git'
             }
         }
         stage('Set AWS Credentials') {
@@ -31,22 +31,22 @@ pipeline {
         }
         stage('Terraform Plan') {
             steps {
-                sh '''
-                    terraform plan \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
+                // sh '''
+                //     terraform plan \
+                //       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                //       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                // '''
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
-            steps {
-                sh '''
-                    terraform apply -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
-                sh 'sleep 60s'
+            // steps {
+            //     sh '''
+            //         terraform apply -auto-approve \
+            //           -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+            //           -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+            //     '''
+            //     sh 'sleep 60s'
             }
-        }*/
         }
-    }
+   }
+}
