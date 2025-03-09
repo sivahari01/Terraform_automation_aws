@@ -53,6 +53,9 @@ pipeline {
              when {
                 expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
             }
+            ithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             steps {
                 // Add terraform plan execution here, for example:
                 sh '''
@@ -68,6 +71,9 @@ pipeline {
               when {
                 expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
             }
+            ithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             steps {
                 // Apply terraform configuration
                 sh '''
