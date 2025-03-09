@@ -41,6 +41,18 @@ sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
 # Zip the HTML report before uploading
 sudo zip -r /root/html_report.zip /root/html_report
  
+sleep 60s
+ 
+# Create AWS credentials file
+sudo mkdir -p ~/.aws
+sudo touch  ~/.aws/credentials
+sleep 5s
+sudo chmod 600 /root/.aws/credentials
+sleep 10s
+echo "[default]
+aws_access_key_id=${AWS_ACCESS_KEY_ID}
+aws_secret_access_key=${AWS_SECRET_ACCESS_KEY} " | sudo tee /root/.aws/credentials > /dev/null
+sleep 10s
 # Install AWS CLI
 sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo unzip awscliv2.zip
@@ -49,18 +61,6 @@ sudo ./aws/install
 
 # Verify AWS CLI installation
 aws --version
-
-sleep 300s 
-# Create AWS credentials file
-  sudo mkdir -p ~/.aws
-  sudo touch  ~/.aws/credentials
-  sleep 5s
-  sudo chmod 600 /root/.aws/credentials
-  sleep 10s
-  echo "[default]
-  aws_access_key_id=${AWS_ACCESS_KEY_ID}
-  aws_secret_access_key=${AWS_SECRET_ACCESS_KEY} " | sudo tee /root/.aws/credentials > /dev/null
-
 
 sleep 30s
 # Upload report to S3
