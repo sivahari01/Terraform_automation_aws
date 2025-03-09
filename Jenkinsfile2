@@ -10,6 +10,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Ensure this step is uncommented to pull the repository
+                git 'https://github.com/sivahari01/DevopsLearn.git'
+            }
+        }
+        stage('Set AWS Credentials') {
+            steps {
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    script {
+                        echo "AWS Credentials Set"
+                    }
+                }
+            }
+        }
+    stages {
+        stage('Checkout') {
+            steps {
                sh '''
                         ls
                         pwd
@@ -18,7 +36,6 @@ pipeline {
                         cd Terraform
                         pwd
                         ls
-                        terraform init
                         terraform destroy -auto-approve \
                             -var="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
                             -var="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
