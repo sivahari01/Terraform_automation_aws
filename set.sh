@@ -35,7 +35,7 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 # Pull and run JMeter container
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
-  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_1
+  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
 # Wait for report generation to complete
 sleep 5  
