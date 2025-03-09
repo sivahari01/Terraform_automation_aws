@@ -51,7 +51,7 @@ sudo zip -r /root/html_report.zip /root/html_report
   aws_access_key_id=${var.AWS_ACCESS_KEY_ID}
   aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY} " > ~/.aws/credentials
 
-
+sleep 5s
 # Set correct permissions
  chmod 600 ~/.aws/credentials
  
