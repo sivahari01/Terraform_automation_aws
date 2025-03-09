@@ -15,11 +15,11 @@ pipeline {
                         pwd
                         cd ..
                         pwd
-                        cd Terraform@tmp
+                        cd Terraform
                         pwd
                         ls
-                        sudo terraform init
-                        sudo terraform destroy -auto-approve \
+                        terraform init
+                        terraform destroy -auto-approve \
                             -var="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
                             -var="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 
