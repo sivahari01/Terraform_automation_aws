@@ -32,21 +32,18 @@ pipeline {
             steps {
                 // Initialize terraform
                 sh 'terraform init'
-                sh '''
-                    terraform destroy -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
             }
         }
         stage('Terraform Plan') {
-              when {
-                expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
-            }
             steps {
                 // Add terraform plan execution here, for example:
                 sh '''
                     terraform plan \
+                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                '''
+                 sh '''
+                    terraform destroy -auto-approve \
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
                 '''
