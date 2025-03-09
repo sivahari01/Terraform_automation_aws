@@ -35,7 +35,7 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 # Pull and run JMeter container
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
-  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_$(date +"%Y-%m-%d %H:%M:%S")
+  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_new
 
 
 # Zip the HTML report before uploading
@@ -44,14 +44,7 @@ sudo zip -r /root/html_report.zip /root/html_report
 sleep 60s
  
 # Create AWS credentials file
-sudo mkdir -p ~/.aws
-sudo touch  ~/.aws/credentials
-sleep 5s
-sudo chmod 600 /root/.aws/credentials
-sleep 10s
-echo "[default]
-aws_access_key_id=${AWS_ACCESS_KEY_ID}
-aws_secret_access_key=${AWS_SECRET_ACCESS_KEY} " | sudo tee /root/.aws/credentials > /dev/null
+
 sleep 10s
 # Install AWS CLI
 sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
