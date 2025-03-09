@@ -35,11 +35,11 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 # Pull and run JMeter container
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
-  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
+  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_$date +"%Y-%m-%d_%H-%M-%S")
 
 
 # Zip the HTML report before uploading
-sudo zip -r /root/html_report.zip /root/html_report
+sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M-%S").zip /root/html_report_$(date +"%Y-%m-%d_%H-%M-%S")
  
 sleep 60s
  
