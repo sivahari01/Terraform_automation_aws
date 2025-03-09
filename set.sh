@@ -40,7 +40,7 @@ sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
 # Wait for report generation to complete
 sleep 5  
 
-sudo zip -r /root/html_report_1.zip /root/results/html_report_1
+sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip /root/html_report
 
 sleep 60s
  
