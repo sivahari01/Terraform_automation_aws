@@ -1,5 +1,8 @@
 pipeline {
     agent any
+      parameters {
+        booleanParam(name: 'SKIP_STAGES_2_3', defaultValue: true, description: 'Skip Stages 2 and 3')
+    }
     options {
         // Keep the last 5 builds
         buildDiscarder(logRotator(numToKeepStr: '2'))
@@ -32,6 +35,9 @@ pipeline {
             }
         }
         stage('Terraform Plan') {
+              when {
+                expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
+            }
             steps {
                 // Add terraform plan execution here, for example:
                 sh '''
@@ -42,6 +48,9 @@ pipeline {
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
+              when {
+                expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
+            }
             steps {
                 // Apply terraform configuration
                 sh '''
