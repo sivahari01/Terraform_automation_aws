@@ -23,15 +23,29 @@ pipeline {
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     script {
-                        echo "AWS Credentials Set"
+                        
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        '''
                     }
                 }
             }
         }
         stage('Terraform Init') {
             steps {
-                // Initialize terraform
-                sh 'terraform init'
+                // Initialize terraformwithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                                     accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    script {
+                        
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        '''
+                        sh 'terraform init'
+                    }
+                
             }
         }
         stage('Terraform Plan') {
@@ -41,6 +55,8 @@ pipeline {
             steps {
                 // Add terraform plan execution here, for example:
                 sh '''
+                    export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                    export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
                     terraform plan \
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
@@ -54,6 +70,8 @@ pipeline {
             steps {
                 // Apply terraform configuration
                 sh '''
+                    export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                    export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
                     terraform apply -auto-approve \
                       -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                       -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
