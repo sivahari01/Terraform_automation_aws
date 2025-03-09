@@ -35,18 +35,12 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 # Pull and run JMeter container
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
-  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
+  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_1
 
 # Wait for report generation to complete
 sleep 5  
 
-# Verify that the report directory exists before zipping
-if [ -d "/root/results/html_report" ]; then
-    sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip /root/results/html_report
-else
-    echo "Error: JMeter report directory '/root/results/html_report' not found!"
-    exit 1
-fi
+sudo zip -r /root/html_report_1.zip /root/results/html_report_1
 
 sleep 60s
  
