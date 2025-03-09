@@ -63,6 +63,11 @@ sudo ./aws/install
 # Verify AWS CLI installation
 aws --version
 
+sleep 10s
+echo "[default]
+aws_access_key_id=${var.AWS_ACCESS_KEY_ID}
+aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY} " | sudo tee /root/.aws/credentials > /dev/null
+sleep 30s
 # Upload report to S3
 sudo aws s3 cp /root/html_report.zip s3://mykopsbkter/
 
