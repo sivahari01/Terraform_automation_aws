@@ -44,9 +44,12 @@ sudo zip -r /root/html_report.zip /root/html_report
 
 # Create AWS credentials file
   sudo mkdir -p ~/.aws
-  echo "[default]
+  sudo touch  ~/.aws/credentials
+  sleep 10s
+  echo "
+  [default]
   aws_access_key_id=${var.AWS_ACCESS_KEY_ID}
-  aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY}" > ~/.aws/credentials
+  aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY} " > ~/.aws/credentials
 
 
 # Set correct permissions
