@@ -3,6 +3,7 @@ resource "aws_instance" "docker_ec2" {
   instance_type        = "t2.micro"
   key_name             = "NewKey_310324"
   security_groups      = [aws_security_group.docker_sg.name]
+  iam_instance_profile = aws_iam_instance_profile.s3_profile.name
  # Handle count indexing properly
   user_data = "${file("set.sh")}"
   tags = {
