@@ -15,7 +15,7 @@ pipeline {
                         pwd
                         cd ..
                         pwd
-                        cd Terraform
+                        cd Terraform@tmp
                         pwd
                         ls
                        // terraform init
