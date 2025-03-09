@@ -35,11 +35,10 @@ cp /root/JmeterRunGit/mytest.jmx /root/
 # Pull and run JMeter container
 sudo docker pull justb4/jmeter
 sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
-  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report_$(date +"%Y-%m-%d_%H-%M")
+  -n -t /tests/mytest.jmx -l /results/results.jtl -e -o /results/html_report
 
-sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip /root/results/html_report_$(date +"%Y-%m-%d_%H-%M")
+sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip /root/results/html_report
 
- 
 sleep 60s
  
 # Create AWS credentials file
