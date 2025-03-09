@@ -60,4 +60,4 @@ sleep 30s
 sudo aws s3 cp /root/html_report.zip s3://mykopsbkter/
 
 
-echo "✅ Script execution completed successfully!"
+echo "Script execution completed successfully!"
