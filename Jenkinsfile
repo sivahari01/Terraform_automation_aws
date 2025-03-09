@@ -66,6 +66,7 @@ pipeline {
         always {
             // Clean up workspace after every build
             //cleanWs()
+            sh "pwd"
         }
     }
 }
