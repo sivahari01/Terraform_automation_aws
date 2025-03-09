@@ -13,7 +13,7 @@ pipeline {
                sh '''
                         ls
                         pwd
-                        sudo mv var/jenkins_home/workspace/Destroy_Terrsform var/jenkins_home/workspace/Terraform
+                        mv var/jenkins_home/workspace/Destroy_Terrsform var/jenkins_home/workspace/Terraform
                         cd ..
                         pwd
                         cd Terraform
