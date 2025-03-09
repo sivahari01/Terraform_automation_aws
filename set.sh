@@ -40,7 +40,7 @@ sudo docker run --rm -v /root/:/tests -v /root/:/results justb4/jmeter \
 # Wait for report generation to complete
 sleep 5  
 
-sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip /root/html_report
+sudo zip -r /root/html_report_$(date +"%Y-%m-%d_%H-%M").zip  /root/html_report
 
 sleep 60s
  
@@ -58,7 +58,7 @@ aws --version
 
 sleep 30s
 # Upload report to S3
-sudo aws s3 cp /root/html_report.zip s3://mykopsbkter/
+sudo aws s3 cp /root/*.zip s3://mykopsbkter/
 
 
 echo "Script execution completed successfully!"
