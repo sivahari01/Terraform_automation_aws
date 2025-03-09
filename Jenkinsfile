@@ -1,11 +1,10 @@
 pipeline {
     agent any
-      parameters {
-        booleanParam(name: 'SKIP_STAGES_2_3', defaultValue: false , description: 'Skip Stages 2 and 3')
+    parameters {
+        booleanParam(name: 'SKIP_STAGES_2_3', defaultValue: false, description: 'Skip Stages 2 and 3')
     }
     options {
-        // Keep the last 5 builds
-        buildDiscarder(logRotator(numToKeepStr: '2'))
+        buildDiscarder(logRotator(numToKeepStr: '2')) // Keep the last 2 builds
     }
     environment {
         AWS_REGION = 'us-east-1'  // Set your preferred AWS region
@@ -13,7 +12,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Ensure this step is uncommented to pull the repository
                 git 'https://github.com/sivahari01/DevopsLearn.git'
             }
         }
@@ -23,7 +21,6 @@ pipeline {
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     script {
-                        
                         sh '''
                         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
                         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -34,64 +31,64 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                // Initialize terraform
                 withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     script {
-                        
                         sh '''
                         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
                         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        terraform init
                         '''
-                        sh 'terraform init'
                     }
-                
+                }
             }
         }
         stage('Terraform Plan') {
-             when {
+            when {
                 expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
             }
-            ithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+            steps {
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-            steps {
-                // Add terraform plan execution here, for example:
-                sh '''
-                    export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-                    export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-                    terraform plan \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
+                    script {
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        terraform plan \
+                          -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                          -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                        '''
+                    }
+                }
             }
         }
         stage('Terraform Apply EC2 & Security Group') {
-              when {
+            when {
                 expression { !params.SKIP_STAGES_2_3 }  // Skip if parameter is true
             }
-            ithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+            steps {
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-            steps {
-                // Apply terraform configuration
-                sh '''
-                    export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-                    export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-                    terraform apply -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
-                sh 'sleep 60s'
+                    script {
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                        terraform apply -auto-approve \
+                          -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                          -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+                        '''
+                        sh 'sleep 60s'
+                    }
+                }
             }
         }
     }
-  post {
+    post {
         always {
-            // Clean up workspace after every build
-            //cleanWs()
-            sh "pwd"
+            sh "pwd" // Print working directory
         }
     }
 }
