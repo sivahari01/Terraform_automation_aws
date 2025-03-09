@@ -34,7 +34,8 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                // Initialize terraformwithCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
+                // Initialize terraform
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', 
                                      accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
                                      secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     script {
