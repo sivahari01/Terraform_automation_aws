@@ -18,6 +18,7 @@ pipeline {
                         cd Terraform
                         pwd
                         ls
+                        rm variables.tf
                         echo " 
                         terraform {
                           required_providers {
