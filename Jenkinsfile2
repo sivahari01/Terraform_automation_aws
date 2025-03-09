@@ -18,10 +18,10 @@ pipeline {
                         cd Terraform@tmp
                         pwd
                         ls
-                       // terraform init
-                       // terraform destroy -auto-approve \
-                        //  -var="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
-                          //-var="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+                        sudo terraform init
+                        sudo terraform destroy -auto-approve \
+                            -var="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
+                            -var="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 
                 '''
                  
