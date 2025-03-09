@@ -15,7 +15,6 @@ pipeline {
                         pwd
                         cd ..
                         pwd
-                        cd ..
                         cd Terraform@tmp
                         pwd
                         ls
