@@ -56,7 +56,8 @@ sudo zip -r /root/html_report.zip /root/html_report
 # Install AWS CLI
 sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo unzip awscliv2.zip
-sudo ./aws/install -y
+sudo ./aws/install
+
 
 # Verify AWS CLI installation
 aws --version
