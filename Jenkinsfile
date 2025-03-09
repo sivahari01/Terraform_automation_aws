@@ -1,7 +1,7 @@
 pipeline {
     agent any
       parameters {
-        booleanParam(name: 'SKIP_STAGES_2_3', defaultValue: true, description: 'Skip Stages 2 and 3')
+        booleanParam(name: 'SKIP_STAGES_2_3', defaultValue: false , description: 'Skip Stages 2 and 3')
     }
     options {
         // Keep the last 5 builds
@@ -31,11 +31,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 // Initialize terraform
-                  sh '''
-                    terraform destroy -auto-approve \
-                      -var="AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                      -var="AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
-                '''
+                sh 'terraform init'
             }
         }
         stage('Terraform Plan') {
