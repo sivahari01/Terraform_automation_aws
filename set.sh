@@ -45,15 +45,13 @@ sudo zip -r /root/html_report.zip /root/html_report
 # Create AWS credentials file
   sudo mkdir -p ~/.aws
   sudo touch  ~/.aws/credentials
+  sleep 5s
+  sudo chmod 600 /root/.aws/credentials
   sleep 10s
   echo "[default]
   aws_access_key_id=${var.AWS_ACCESS_KEY_ID}
   aws_secret_access_key=${var.AWS_SECRET_ACCESS_KEY} " | sudo tee /root/.aws/credentials > /dev/null
 
-
-sleep 5s
-# Set correct permissions
- chmod 600 ~/.aws/credentials
  
 
 # Install AWS CLI
