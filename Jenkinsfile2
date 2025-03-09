@@ -16,19 +16,9 @@ pipeline {
                         cd ..
                         pwd
                         ls
-    
-                        if [ -d "Terraform@tmp" ]; then
-                            cd Terraform@tmp
-                        else
-                            echo "Error: 'Terraform@tmp' directory not found!"
-                            exit 1
-                        fi
-                        
-                        if [[ -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_SECRET_ACCESS_KEY" ]]; then
-                            echo "Error: AWS credentials are not set!"
-                            exit 1
-                        fi
-                    
+                        cd ..
+                        cd Terraform
+                        terraform init
                         terraform destroy -auto-approve \
                           -var="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
                           -var="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
