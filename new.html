@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Neoload Container Stats Dashboard</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  th { background-color: #f2f2f2; }
+  tfoot td { font-weight: bold; background-color: #e6e6e6; }
+</style>
+</head>
+<body>
+
+<h2>Upload Neoload XML Statistics</h2>
+<input type="file" id="xmlFile" accept=".xml">
+<table id="statsTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>TPS</th>
+      <th>TPM</th>
+      <th>Min (s)</th>
+      <th>Avg (s)</th>
+      <th>Max (s)</th>
+      <th>90th Perc</th>
+      <th>95th Perc</th>
+      <th>99th Perc</th>
+      <th>Count</th>
+      <th>Pass Count</th>
+      <th>Errors</th>
+      <th>Error Rate (%)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+  <tfoot>
+    <tr id="summaryRow">
+      <td>Summary</td>
+      <td></td> <!-- TPS blank -->
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td> <!-- Error Rate blank -->
+    </tr>
+  </tfoot>
+</table>
+
+<script>
+document.getElementById('xmlFile').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(e.target.result, "text/xml");
+        
+        // Select containers with parentName="Actions" and name!="Actions"
+        const containers = Array.from(xmlDoc.querySelectorAll('statistic-item[type="container"]'))
+                                .filter(el => el.getAttribute('parentName') === 'Actions' && el.getAttribute('name') !== 'Actions');
+        
+        const tbody = document.querySelector('#statsTable tbody');
+        tbody.innerHTML = ''; // clear table
+        
+        // Accumulators for summary
+        let sumTPM = 0, sumCount = 0, sumPass = 0, sumErrors = 0;
+        let sumMin = 0, sumAvg = 0, sumMax = 0, sumPerc90 = 0, sumPerc95 = 0, sumPerc99 = 0;
+        let valid90 = 0, valid95 = 0, valid99 = 0;
+        
+        containers.forEach(item => {
+            const name = item.getAttribute('name');
+            const avg = parseFloat(item.getAttribute('avg')) || 0;
+            const min = parseFloat(item.getAttribute('min')) || 0;
+            const max = parseFloat(item.getAttribute('max')) || 0;
+            const count = parseInt(item.getAttribute('hits')) || 0;
+            const errors = parseInt(item.getAttribute('errors')) || 0;
+            const passCount = count - errors;
+            const errorRate = parseFloat(item.getAttribute('error_rate')) || 0;
+            
+            // Handle percentile, ignore '-' values
+            const perc90 = item.getAttribute('percentile1') !== '-' ? parseFloat(item.getAttribute('percentile1')) : null;
+            const perc95 = item.getAttribute('percentile2') !== '-' ? parseFloat(item.getAttribute('percentile2')) : null;
+            const perc99 = item.getAttribute('percentile3') !== '-' ? parseFloat(item.getAttribute('percentile3')) : null;
+            
+            const TPS = (count / 300).toFixed(2);       // Count / 300 seconds
+            const TPM = (TPS * 60).toFixed(2);          // TPS * 60
+            
+            sumTPM += parseFloat(TPM);
+            sumCount += count;
+            sumPass += passCount;
+            sumErrors += errors;
+            
+            sumMin += min;
+            sumAvg += avg;
+            sumMax += max;
+            if (perc90 !== null) { sumPerc90 += perc90; valid90++; }
+            if (perc95 !== null) { sumPerc95 += perc95; valid95++; }
+            if (perc99 !== null) { sumPerc99 += perc99; valid99++; }
+            
+            const row = `<tr>
+                <td>${name}</td>
+                <td>${TPS}</td>
+                <td>${TPM}</td>
+                <td>${min}</td>
+                <td>${avg}</td>
+                <td>${max}</td>
+                <td>${perc90 !== null ? perc90 : '-'}</td>
+                <td>${perc95 !== null ? perc95 : '-'}</td>
+                <td>${perc99 !== null ? perc99 : '-'}</td>
+                <td>${count}</td>
+                <td>${passCount}</td>
+                <td>${errors}</td>
+                <td>${errorRate}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+        
+        // Populate summary row
+        const summary = document.getElementById('summaryRow');
+        summary.cells[2].innerText = sumTPM.toFixed(2);
+        summary.cells[3].innerText = (sumMin / containers.length).toFixed(3);
+        summary.cells[4].innerText = (sumAvg / containers.length).toFixed(3);
+        summary.cells[5].innerText = (sumMax / containers.length).toFixed(3);
+        summary.cells[6].innerText = valid90 ? (sumPerc90 / valid90).toFixed(3) : '-';
+        summary.cells[7].innerText = valid95 ? (sumPerc95 / valid95).toFixed(3) : '-';
+        summary.cells[8].innerText = valid99 ? (sumPerc99 / valid99).toFixed(3) : '-';
+        summary.cells[9].innerText = sumCount;
+        summary.cells[10].innerText = sumPass;
+        summary.cells[11].innerText = sumErrors;
+    };
+    reader.readAsText(file);
+});
+</script>
+
+</body>
+</html>
